@@ -1,0 +1,67 @@
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:mydb
+    username: username
+    password: password
+    driverClassName: org.h2.Driver
+
+    # HikariCP settings
+    hikari:
+      minimumIdle: 5
+      maximumPoolSize: 20
+      idleTimeout: 30000
+      maxLifetime: 2000000
+      connectionTimeout: 30000
+      poolName: HikariPool
+  jpa:
+    # open-in-view: false
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        #to show sql
+        show_sql: true
+        format_sql: true
+        type:
+          descriptor:
+            sql: trace
+        temp:
+          use_jdbc_metadata_defaults: false
+
+# Twilio Configuration
+twilio:
+  accountSid: ACffac2c9093afc06de19a7fd601ed8ded
+  authToken: 292b06b96916e90c70a8b5a227c25bfa
+  phoneNumber: whatsapp:+14155238886
+#  phoneNumber: +14176474303
+
+#springdoc:
+#  use-management-port: true
+#  # This property enables the openapi and swagger-ui endpoints to be exposed beneath the actuator base path.
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: openapi, swagger-ui
+
+#ACTUATOR CONFIGURATION
+management:
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+    info:
+      enabled: true
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+
+#LOGGING CONFIGURATION
+logging:
+  config: classpath:logback.xml
+
