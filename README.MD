@@ -12,7 +12,9 @@ It also provides a notification service that sends out SMS messages when a loan 
 
 A subscriber can take multiple loans
 
+The application has JUnit5 unit tests. To test simply run `mvn clean test` on your commandline
+
 ## HOW TO RUN
-Run the springboot application (mvn springboot:run) 
+Run the springboot application (`mvn spring-boot:run`)
 
 Navigate to http://localhost:8080/swagger-ui/index.html on your browser for the detailed API documentation
