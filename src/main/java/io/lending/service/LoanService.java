@@ -26,7 +26,7 @@ public class LoanService {
 
         Loan loan = new Loan();
         loan.setSubscriber(subscriber);
-        loan.setAmount(loanDTO.getAmount());
+        loan.setPrincipal(loanDTO.getAmount());
         loan.setCurrency(loanDTO.getCurrency());
 
         Loan savedLoan = loanRepository.save(loan);
@@ -34,7 +34,7 @@ public class LoanService {
         LoanDTO savedLoanDTO = new LoanDTO();
         savedLoanDTO.setId(savedLoan.getId());
         savedLoanDTO.setSubscriberId(savedLoan.getSubscriber().getId());
-        savedLoanDTO.setAmount(savedLoan.getAmount());
+        savedLoanDTO.setAmount(savedLoan.getPrincipal());
         savedLoanDTO.setCurrency(savedLoan.getCurrency());
 
         // Send SMS notification to the subscriber
@@ -43,45 +43,37 @@ public class LoanService {
         return savedLoanDTO;
     }
 
-    public LoanDTO getLoanById(Long loanId) throws CustomException {
+    public LoanDTO getLoanDTOById(Long loanId) throws CustomException {
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new CustomException("Loan "+loanId+" not found"));
 
         LoanDTO loanDTO = new LoanDTO();
         loanDTO.setId(loan.getId());
         loanDTO.setSubscriberId(loan.getSubscriber().getId());
-        loanDTO.setAmount(loan.getAmount());
+        loanDTO.setAmount(loan.getPrincipal());
         loanDTO.setCurrency(loan.getCurrency());
 
         return loanDTO;
     }
 
-    public LoanDTO updateLoan(Long loanId, LoanDTO loanDTO) throws CustomException {
-        Loan loan = loanRepository.findById(loanId)
+    public Loan getLoanById(Long loanId) throws CustomException {
+        return loanRepository.findById(loanId)
                 .orElseThrow(() -> new CustomException("Loan "+loanId+" not found"));
+    }
 
-        Subscriber subscriber = subscriberRepository.findById(loanDTO.getSubscriberId())
-                .orElseThrow(() -> new CustomException("Subscriber "+loanDTO.getSubscriberId()+ " not found"));
-
-        loan.setSubscriber(subscriber);
-        loan.setAmount(loanDTO.getAmount());
-        loan.setCurrency(loanDTO.getCurrency());
-
-        Loan updatedLoan = loanRepository.save(loan);
-
-        LoanDTO updatedLoanDTO = new LoanDTO();
-        updatedLoanDTO.setId(updatedLoan.getId());
-        updatedLoanDTO.setSubscriberId(updatedLoan.getSubscriber().getId());
-        updatedLoanDTO.setAmount(updatedLoan.getAmount());
-        updatedLoanDTO.setCurrency(updatedLoan.getCurrency());
-
-        return updatedLoanDTO;
+    public void updateLoan(Loan loan) {
+        loanRepository.save(loan);
     }
 
     public void deleteLoan(Long loanId) throws CustomException {
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new CustomException("Loan "+loanId+" not found"));
 
+        loanRepository.delete(loan);
+    }
+
+    public void markLoanAsFullyRepaid(Loan loan) {
+        // Sweep fully repaid loans
         loanRepository.delete(loan);
     }
 

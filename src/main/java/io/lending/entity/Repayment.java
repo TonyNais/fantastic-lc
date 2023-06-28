@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "repayments")
@@ -20,5 +21,7 @@ public class Repayment {
 
     @Column(nullable = false)
     private BigDecimal amount;
+
+    private LocalDateTime repaymentDate;
 
 }

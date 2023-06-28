@@ -19,7 +19,10 @@ public class Loan {
     private Subscriber subscriber;
 
     @Column(nullable = false)
-    private BigDecimal amount;
+    private BigDecimal principal;
+
+    @Column
+    private BigDecimal outStandingBalance;
 
     @Column(nullable = false)
     private String currency = "KSH";

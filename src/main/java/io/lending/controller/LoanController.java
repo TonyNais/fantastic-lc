@@ -4,7 +4,6 @@ import io.lending.dto.LoanDTO;
 import io.lending.service.LoanService;
 import io.lending.util.CustomException;
 import io.lending.util.ErrorResponse;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,35 +50,35 @@ public class LoanController {
     @GetMapping("/{loanId}")
     public ResponseEntity<?> getLoan(@PathVariable Long loanId) {
         try {
-            LoanDTO createdLoan = loanService.getLoanById(loanId);
+            LoanDTO createdLoan = loanService.getLoanDTOById(loanId);
             return ResponseEntity.status(HttpStatus.OK).body(createdLoan);
         }catch (CustomException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("There was an error",e.getMessage()));
         }
     }
 
-    @Operation(summary = "Update loan")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Loan updated"),
-            @ApiResponse(responseCode = "404", description = "Loan not found")
-    })
-    @PutMapping("/{loanId}")
-    public ResponseEntity<?> updateLoan(@PathVariable Long loanId, @RequestBody LoanDTO loanDTO) {
-        try {
-            LoanDTO createdLoan = loanService.updateLoan(loanId,loanDTO);
-            return ResponseEntity.status(HttpStatus.OK).body(createdLoan);
-        }catch (CustomException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("There was an error",e.getMessage()));
-        }
-    }
+//    @Operation(summary = "Update loan")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "Loan updated"),
+//            @ApiResponse(responseCode = "404", description = "Loan not found")
+//    })
+//    @PutMapping("/{loanId}")
+//    public ResponseEntity<?> updateLoan(@PathVariable Long loanId, @RequestBody LoanDTO loanDTO) {
+//        try {
+//            LoanDTO createdLoan = loanService.updateLoan(loanId,loanDTO);
+//            return ResponseEntity.status(HttpStatus.OK).body(createdLoan);
+//        }catch (CustomException e){
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("There was an error",e.getMessage()));
+//        }
+//    }
 
-    @Operation(summary = "Delete loan")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Loan deleted"),
-            @ApiResponse(responseCode = "404", description = "Loan not found")
-    })
-    @DeleteMapping("/{loanId}")
-    public ResponseEntity<Void> deleteLoan(@PathVariable Long loanId) {
-        return null;
-    }
+//    @Operation(summary = "Delete loan")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "204", description = "Loan deleted"),
+//            @ApiResponse(responseCode = "404", description = "Loan not found")
+//    })
+//    @DeleteMapping("/{loanId}")
+//    public ResponseEntity<Void> deleteLoan(@PathVariable Long loanId) {
+//        return null;
+//    }
 }
