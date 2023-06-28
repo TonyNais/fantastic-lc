@@ -5,10 +5,13 @@ import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 import io.lending.config.TwilioConfig;
 import io.lending.dto.LoanDTO;
+import io.lending.entity.Loan;
 import io.lending.entity.Subscriber;
 import io.lending.repository.SubscriberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 @Service
 public class NotificationService {
@@ -29,9 +32,9 @@ public class NotificationService {
         sendSmsNotification(loanDTO.getSubscriberId(), message);
     }
 
-    public void sendRepaymentNotification(LoanDTO loanDTO) {
-        String message = "A repayment of " + loanDTO.getAmount() + " units has been received.";
-        sendSmsNotification(loanDTO.getSubscriberId(), message);
+    public void sendRepaymentNotification(Long subscriberId, BigDecimal amount) {
+        String message = "A repayment of " + amount + " units has been received.";
+        sendSmsNotification(subscriberId, message);
     }
 
     private void sendSmsNotification(Long subscriberId, String message) {
@@ -48,5 +51,10 @@ public class NotificationService {
                 .create(twilioRestClient);
 
         System.out.println("SMS sent to " + phoneNumber + ": " + message);
+    }
+
+    public void sendFullySettledLoanNotification(Loan loan) {
+        String message = "Your loan for " + loan.getCurrency() + " "+ loan.getPrincipal() +" has been fully settled.";
+        sendSmsNotification(loan.getSubscriber().getId(), message);
     }
 }

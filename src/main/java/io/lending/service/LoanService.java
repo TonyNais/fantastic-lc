@@ -68,13 +68,6 @@ public class LoanService {
         loanRepository.save(loan);
     }
 
-    public void deleteLoan(Long loanId) throws CustomException {
-        Loan loan = loanRepository.findById(loanId)
-                .orElseThrow(() -> new CustomException("Loan "+loanId+" not found"));
-
-        loanRepository.delete(loan);
-    }
-
     public void markLoanAsFullyRepaid(Loan loan) {
         // Sweep fully repaid loans
         loanRepository.delete(loan);
