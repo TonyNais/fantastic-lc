@@ -6,5 +6,6 @@ import lombok.Setter;
 @Getter @Setter
 public class SubscriberDTO {
     private Long id;
+    private String name;
     private String msisdn;
 }

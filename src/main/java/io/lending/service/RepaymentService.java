@@ -47,7 +47,7 @@ public class RepaymentService {
 
         } else {
             //send notification
-            notificationService.sendRepaymentNotification(loan.getSubscriber().getId(),repaymentDTO.getAmount());
+            notificationService.sendRepaymentNotification(loan,repaymentDTO.getAmount());
             loanService.updateLoan(loan);
         }
 

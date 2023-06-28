@@ -19,11 +19,13 @@ public class SubscriberService {
     public SubscriberDTO createSubscriber(SubscriberDTO subscriberDTO) {
         Subscriber subscriber = new Subscriber();
         subscriber.setMsisdn(subscriberDTO.getMsisdn());
+        subscriber.setName(subscriberDTO.getName());
 
         Subscriber savedSubscriber = subscriberRepository.save(subscriber);
 
         SubscriberDTO savedSubscriberDTO = new SubscriberDTO();
         savedSubscriberDTO.setId(savedSubscriber.getId());
+        savedSubscriberDTO.setName(savedSubscriber.getName());
         savedSubscriberDTO.setMsisdn(savedSubscriber.getMsisdn());
 
         return savedSubscriberDTO;
@@ -42,6 +44,7 @@ public class SubscriberService {
         if (optionalSubscriber.isPresent()) {
             Subscriber subscriber = optionalSubscriber.get();
             subscriber.setMsisdn(subscriberDTO.getMsisdn());
+            subscriber.setName(subscriberDTO.getName());
             return Optional.of(subscriberRepository.save(subscriber));
         }
         return Optional.empty();
