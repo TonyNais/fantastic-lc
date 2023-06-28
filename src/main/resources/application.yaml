@@ -30,9 +30,9 @@ spring:
 
 # Twilio Configuration
 twilio:
-  accountSid: ACffac2c9093afc06de19a7fd601ed8ded
-  authToken: 292b06b96916e90c70a8b5a227c25bfa
-  phoneNumber: whatsapp:+14155238886
+  accountSid: TWILIO_SID
+  authToken: TWILIO_TOKEN
+  phoneNumber: TWILIO_PHONE
 #  phoneNumber: +14176474303
 
 #springdoc:
