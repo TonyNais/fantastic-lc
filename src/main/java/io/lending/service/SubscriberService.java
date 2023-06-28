@@ -5,6 +5,9 @@ import io.lending.entity.Subscriber;
 import io.lending.repository.SubscriberRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class SubscriberService {
     private final SubscriberRepository subscriberRepository;
@@ -16,17 +19,40 @@ public class SubscriberService {
     public SubscriberDTO createSubscriber(SubscriberDTO subscriberDTO) {
         Subscriber subscriber = new Subscriber();
         subscriber.setMsisdn(subscriberDTO.getMsisdn());
-        // Set other properties if needed
 
         Subscriber savedSubscriber = subscriberRepository.save(subscriber);
 
         SubscriberDTO savedSubscriberDTO = new SubscriberDTO();
         savedSubscriberDTO.setId(savedSubscriber.getId());
         savedSubscriberDTO.setMsisdn(savedSubscriber.getMsisdn());
-        // Set other properties if needed
 
         return savedSubscriberDTO;
     }
 
-    // Other service methods for retrieving, updating, and deleting subscribers
+    public List<Subscriber> getAllSubscribers() {
+        return subscriberRepository.findAll();
+    }
+
+    public Optional<Subscriber> getSubscriberById(Long id) {
+        return subscriberRepository.findById(id);
+    }
+
+    public Optional<Subscriber> updateSubscriber(Long id, SubscriberDTO subscriberDTO) {
+        Optional<Subscriber> optionalSubscriber = subscriberRepository.findById(id);
+        if (optionalSubscriber.isPresent()) {
+            Subscriber subscriber = optionalSubscriber.get();
+            subscriber.setMsisdn(subscriberDTO.getMsisdn());
+            return Optional.of(subscriberRepository.save(subscriber));
+        }
+        return Optional.empty();
+    }
+
+    public boolean deleteSubscriber(Long id) {
+        Optional<Subscriber> optionalSubscriber = subscriberRepository.findById(id);
+        if (optionalSubscriber.isPresent()) {
+            subscriberRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 }

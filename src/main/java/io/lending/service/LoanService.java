@@ -5,7 +5,7 @@ import io.lending.entity.Loan;
 import io.lending.entity.Subscriber;
 import io.lending.repository.LoanRepository;
 import io.lending.repository.SubscriberRepository;
-import jakarta.persistence.EntityNotFoundException;
+import io.lending.util.CustomException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,9 +20,9 @@ public class LoanService {
         this.notificationService = notificationService;
     }
 
-    public LoanDTO createLoan(LoanDTO loanDTO) {
+    public LoanDTO createLoan(LoanDTO loanDTO) throws  CustomException {
         Subscriber subscriber = subscriberRepository.findById(loanDTO.getSubscriberId())
-                .orElseThrow(() -> new EntityNotFoundException("Subscriber not found"));
+                .orElseThrow(() -> new CustomException("Subscriber "+loanDTO.getSubscriberId()+ " not found"));
 
         Loan loan = new Loan();
         loan.setSubscriber(subscriber);
@@ -36,7 +36,6 @@ public class LoanService {
         savedLoanDTO.setSubscriberId(savedLoan.getSubscriber().getId());
         savedLoanDTO.setAmount(savedLoan.getAmount());
         savedLoanDTO.setCurrency(savedLoan.getCurrency());
-        // Set other properties if needed
 
         // Send SMS notification to the subscriber
         notificationService.sendLoanNotification(savedLoanDTO);
@@ -44,5 +43,46 @@ public class LoanService {
         return savedLoanDTO;
     }
 
-    // Other service methods for retrieving, updating, and deleting loans
+    public LoanDTO getLoanById(Long loanId) throws CustomException {
+        Loan loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new CustomException("Loan "+loanId+" not found"));
+
+        LoanDTO loanDTO = new LoanDTO();
+        loanDTO.setId(loan.getId());
+        loanDTO.setSubscriberId(loan.getSubscriber().getId());
+        loanDTO.setAmount(loan.getAmount());
+        loanDTO.setCurrency(loan.getCurrency());
+
+        return loanDTO;
+    }
+
+    public LoanDTO updateLoan(Long loanId, LoanDTO loanDTO) throws CustomException {
+        Loan loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new CustomException("Loan "+loanId+" not found"));
+
+        Subscriber subscriber = subscriberRepository.findById(loanDTO.getSubscriberId())
+                .orElseThrow(() -> new CustomException("Subscriber "+loanDTO.getSubscriberId()+ " not found"));
+
+        loan.setSubscriber(subscriber);
+        loan.setAmount(loanDTO.getAmount());
+        loan.setCurrency(loanDTO.getCurrency());
+
+        Loan updatedLoan = loanRepository.save(loan);
+
+        LoanDTO updatedLoanDTO = new LoanDTO();
+        updatedLoanDTO.setId(updatedLoan.getId());
+        updatedLoanDTO.setSubscriberId(updatedLoan.getSubscriber().getId());
+        updatedLoanDTO.setAmount(updatedLoan.getAmount());
+        updatedLoanDTO.setCurrency(updatedLoan.getCurrency());
+
+        return updatedLoanDTO;
+    }
+
+    public void deleteLoan(Long loanId) throws CustomException {
+        Loan loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new CustomException("Loan "+loanId+" not found"));
+
+        loanRepository.delete(loan);
+    }
+
 }
