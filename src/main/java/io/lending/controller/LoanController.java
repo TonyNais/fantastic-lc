@@ -1,6 +1,7 @@
 package io.lending.controller;
 
 import io.lending.dto.LoanDTO;
+import io.lending.entity.Loan;
 import io.lending.service.LoanService;
 import io.lending.util.CustomException;
 import io.lending.util.ErrorResponse;
@@ -14,6 +15,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/loan")
@@ -57,28 +60,14 @@ public class LoanController {
         }
     }
 
-//    @Operation(summary = "Update loan")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "Loan updated"),
-//            @ApiResponse(responseCode = "404", description = "Loan not found")
-//    })
-//    @PutMapping("/{loanId}")
-//    public ResponseEntity<?> updateLoan(@PathVariable Long loanId, @RequestBody LoanDTO loanDTO) {
-//        try {
-//            LoanDTO createdLoan = loanService.updateLoan(loanId,loanDTO);
-//            return ResponseEntity.status(HttpStatus.OK).body(createdLoan);
-//        }catch (CustomException e){
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("There was an error",e.getMessage()));
-//        }
-//    }
+    @Operation(summary = "Get all outstanding loans")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Fetched loans Successfully")
+    })
+    @GetMapping
+    public ResponseEntity<List<Loan>> getAllSubscribers() {
+        List<Loan> subscribers = loanService.getAllLoans();
+        return ResponseEntity.ok(subscribers);
+    }
 
-//    @Operation(summary = "Delete loan")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "204", description = "Loan deleted"),
-//            @ApiResponse(responseCode = "404", description = "Loan not found")
-//    })
-//    @DeleteMapping("/{loanId}")
-//    public ResponseEntity<Void> deleteLoan(@PathVariable Long loanId) {
-//        return null;
-//    }
 }

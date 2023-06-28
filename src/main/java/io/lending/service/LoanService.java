@@ -8,6 +8,8 @@ import io.lending.repository.SubscriberRepository;
 import io.lending.util.CustomException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class LoanService {
     private final LoanRepository loanRepository;
@@ -27,6 +29,7 @@ public class LoanService {
         Loan loan = new Loan();
         loan.setSubscriber(subscriber);
         loan.setPrincipal(loanDTO.getAmount());
+        loan.setOutStandingBalance(loanDTO.getAmount());
         loan.setCurrency(loanDTO.getCurrency());
 
         Loan savedLoan = loanRepository.save(loan);
@@ -77,4 +80,7 @@ public class LoanService {
         loanRepository.delete(loan);
     }
 
+    public List<Loan> getAllLoans() {
+        return loanRepository.findAll();
+    }
 }
